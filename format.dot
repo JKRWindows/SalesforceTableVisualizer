@@ -1,0 +1,18 @@
+digraph {
+    ordering="out";
+    overlap=false;
+    
+    Account [shape=none, label=<
+<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1">
+    <TR><TD BORDER="1">Account</TD></TR>
+    <TR><TD port="f1" ALIGN="LEFT" BORDER="0">
+<FONT color="red">*</FONT>Field Label: Type(Size?) <FONT color="blue">UNIQUE</FONT>
+    </TD></TR>
+    <TR><TD port="f1" ALIGN="LEFT" BORDER="0">
+<FONT color="red">*</FONT>Field Label: Type(Size?) <FONT color="blue">UNIQUE</FONT>
+    </TD></TR>
+    <TR><TD port="f1" ALIGN="LEFT" BORDER="0">
+<FONT color="red">*</FONT>Field Label3: Type(Size?) <FONT color="blue">UNIQUE</FONT>
+    </TD></TR>
+</TABLE>>]
+}

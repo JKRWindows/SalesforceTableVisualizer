@@ -27,6 +27,7 @@ python main.py <outfile_name> [branch_name]
 
 ## Troubleshooting
 Ensure the directory structure is correct:
+```
 ./Metadata folder/
     /force-app/
         /main/
@@ -42,3 +43,4 @@ Ensure the directory structure is correct:
             /...
     /main.py
     /...
+```

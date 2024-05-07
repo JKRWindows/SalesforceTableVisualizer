@@ -1,3 +1,4 @@
+![Sample](./resources/sample.png)
 # Getting Started
 This program was designed to work with `sfdx` and `sf` to retrieve the metadata required to create the graphs.
 ## Requirements

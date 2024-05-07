@@ -33,7 +33,9 @@ Ensure the directory structure is correct:
         /main/
             /default/
                 /...
-    /[Grapher](https://github.com/JKRWindows/Grapher)/
+    /Grapher/
+        /Grapher.py
+        /...
     /SalesforceTableVisualizer/
             /__init__.py
             /SFField.py

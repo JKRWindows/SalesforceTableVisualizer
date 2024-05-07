@@ -2,6 +2,7 @@ import os
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from typing import Iterable, Optional
+from html import escape
 
 from .SFType import *
 
@@ -22,9 +23,9 @@ class SFField:
         full_name = fields['fullName']
         if full_name is None:
             raise Exception('full_name is None')
-        label = fields['label']
+        label = fields.get('label')
         if label is None:
-            raise Exception('label is None')
+            label = full_name
 
         length = fields.get('length')
         length = None if length is None else int(length)
@@ -46,8 +47,6 @@ class SFField:
             case 'AutoIncrementNumber':
                 ntype = AutoIncNum()
             case ('Formula' | 'Checkbox') as f:
-                if formula is None:
-                    raise Exception(f'{formula=} is none when dtype is {dtype}')
                 match f:
                     case 'Formula':
                         ntype = Formula(formula)
@@ -55,7 +54,9 @@ class SFField:
                         ntype = CheckBox(formula)
             case 'Lookup' | 'Extended Lookup' as f:
                 if relationshipLabel is None or relationshipName is None or referenceTo is None:
-                    raise Exception(f'One of {relationshipLabel=}, {relationshipName=}, or {referenceTo=} is None when type is {f}')
+                    print(f'One of {relationshipLabel=}, {relationshipName=}, or {referenceTo=} is None when type is {f} for {label}')
+                    ntype = Lookup(str(relationshipLabel), str(relationshipName), str(referenceTo))
+                    return SFField(full_name, label, length, required, ntype, unique)
                 match f:
                     case 'Lookup':
                         ntype = Lookup(relationshipLabel, relationshipName, referenceTo)
@@ -69,8 +70,14 @@ class SFField:
                 ntype = DateTime()
             case 'Email':
                 ntype = Email()
-            case 'Geolocation':
+            case 'Geolocation' | 'Location':
                 ntype = Geolocation()
+            case 'Hierarchy':
+                ntype = Hierarchy()
+            case 'Html':
+                ntype = Html()
+            case 'MasterDetail':
+                ntype = MasterDetail()
             case 'Number':
                 if scale is None or precision is None:
                     raise ValueError(f'{scale=} or {precision=} is None when dtype is Number')
@@ -81,15 +88,17 @@ class SFField:
                 ntype = Phone()
             case 'Picklist':
                 ntype = Picklist()
-            case 'PicklistMulti':
+            case 'MultiselectPicklist':
                 ntype = PicklistMulti()
+            case 'Summary':
+                ntype = Summary()
             case 'Text':
                 if length is None:
-                    raise ValueError(f'{length=} is None when dtype is Text')
+                    length = 0
                 ntype = Text(length)
             case 'TextArea':
                 ntype = TextArea()
-            case 'TextAreaLong':
+            case 'TextAreaLong' | 'LongTextArea':
                 ntype = TextAreaLong()
             case 'TextAreaRich':
                 ntype = TextAreaRich()
@@ -97,23 +106,23 @@ class SFField:
                 ntype = TextEncrypted()
             case 'Time':
                 ntype = Time()
-            case 'URL':
+            case 'Url':
                 ntype = URL()
             case None:
                 ntype = Text(0)
             case _:
-                raise ValueError(f'{dtype=} isn\'t defined')
+                raise ValueError(f'{dtype=} isn\'t defined on {label}')
     
-        return SFField(full_name, label, length, required, ntype, unique)
+        return SFField(escape(full_name), escape(label), length, required, ntype, unique)
 
     def to_dot(self) -> str:
         return f"""<TR><TD port="{self.full_name}" ALIGN="LEFT" BORDER="0">
-{'<FONT color="red">*</FONT>' if self.required else ''}{self.full_name} ({self.label}): {self.dtype}{f"({self.length})" if self.length else ""}{' <FONT color="blue">UNIQUE</FONT>' if self.unique else ''}
+        {'<FONT color="red">*</FONT>' if self.required else ''}{self.full_name} ({self.label}): {self.dtype}{f"({self.length})" if self.length else ""}{' <FONT color="blue">UNIQUE</FONT>' if self.unique else ''}
     </TD></TR>"""
 
     @classmethod
     def from_folder(cls, folder_path: str) -> Iterable['SFField']:
-        yield from map(lambda file: SFField.from_xml(open(file).read()), os.scandir(folder_path))
+        yield from map(lambda file: SFField.from_xml(open(file, encoding='utf-8').read()), os.scandir(folder_path) if os.path.exists(folder_path) else [])
 
 if __name__ == '__main__':
     xml = open('Loss_Reasons_del__c.field-meta.xml').read()

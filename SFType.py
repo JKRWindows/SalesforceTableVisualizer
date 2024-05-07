@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 
 
 class SFType:
@@ -11,7 +12,7 @@ class AutoIncNum(SFType):
 
 @dataclass
 class Formula(SFType):
-    formula: str
+    formula: Optional[str]
 
 @dataclass
 class Lookup(SFType):
@@ -23,17 +24,12 @@ class Lookup(SFType):
         return f'{self.__class__.__name__}({self.reference_to})'
 
 @dataclass
-class ExtLookup(SFType):
-    relationship_label: str
-    relationship_name: str
-    reference_to: str
-
-    def __str__(self) -> str:
-        return f'{self.__class__.__name__}({self.reference_to})'
+class ExtLookup(Lookup):
+    pass
 
 @dataclass
 class CheckBox(SFType):
-    formula: str
+    formula: Optional[str]
 
 @dataclass
 class Currency(SFType):
@@ -53,6 +49,18 @@ class Email(SFType):
 
 @dataclass
 class Geolocation(SFType):
+    pass
+
+@dataclass
+class Hierarchy(SFType):
+    pass
+
+@dataclass
+class Html(SFType):
+    pass
+
+@dataclass
+class MasterDetail(SFType):
     pass
 
 @dataclass
@@ -77,6 +85,10 @@ class Picklist(SFType):
 
 @dataclass
 class PicklistMulti(SFType):
+    pass
+
+@dataclass
+class Summary(SFType):
     pass
 
 @dataclass

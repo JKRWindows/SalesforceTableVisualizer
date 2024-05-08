@@ -23,8 +23,12 @@ If this errors, there's a good chance there are too many items it's trying to do
 
 3. Run `main.py` with the name of the output file as well as the name of the branch that was downloaded. It will default to `main` if not specified. If you have errors, see [Troubleshooting](#troubleshooting)
 ```sh
-python main.py <outfile_name> [branch_name]
+python main.py <outfile_name> [Options]
 ```
+
+### Options
+- `--file | -f`: Whether to write the code out to a `dot` file (default: `False`)
+- `(--branch | -b)` `<branch_name>`: What branch folder to look in (default: `main`)
 
 ## Troubleshooting
 Ensure the directory structure is correct:

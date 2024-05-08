@@ -32,6 +32,8 @@ class SFVisualizer:
 {indent}overlap=false;
 {indent}rankdir = "RL";
 {indent}ranksep=1;
+{indent}splines=polyline;
+{indent}pack=1;
 
 {indent}""" + f'\n{indent}'.join(map(lambda x: x.to_dot(indent), self.get_objects())) + f"""
 

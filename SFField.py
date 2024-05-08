@@ -52,16 +52,19 @@ class SFField:
                         ntype = Formula(formula)
                     case 'Checkbox':
                         ntype = CheckBox(formula)
-            case 'Lookup' | 'Extended Lookup' as f:
-                if relationshipLabel is None or relationshipName is None or referenceTo is None:
-                    print(f'One of {relationshipLabel=}, {relationshipName=}, or {referenceTo=} is None when type is {f} for {label}')
-                    ntype = Lookup(str(relationshipLabel), str(relationshipName), str(referenceTo))
-                    return SFField(full_name, label, length, required, ntype, unique)
+            case 'Lookup' | 'Extended Lookup' | 'MasterDetail' as f:
                 match f:
                     case 'Lookup':
-                        ntype = Lookup(relationshipLabel, relationshipName, referenceTo)
+                        f = Lookup
                     case 'Extended Lookup':
-                        ntype = ExtLookup(relationshipLabel, relationshipName, referenceTo)
+                        f = ExtLookup
+                    case 'MasterDetail':
+                        f = MasterDetail
+                if relationshipLabel is None or relationshipName is None or referenceTo is None:
+                    # print(f'One of {relationshipLabel=}, {relationshipName=}, or {referenceTo=} is None when type is {f} for {label}')
+                    ntype = f(str(relationshipLabel), str(relationshipName), str(referenceTo))
+                else:
+                    ntype = f(relationshipLabel, relationshipName, referenceTo)
             case 'Currency':
                 ntype = Currency()
             case 'Date':
@@ -76,8 +79,6 @@ class SFField:
                 ntype = Hierarchy()
             case 'Html':
                 ntype = Html()
-            case 'MasterDetail':
-                ntype = MasterDetail()
             case 'Number':
                 if scale is None or precision is None:
                     raise ValueError(f'{scale=} or {precision=} is None when dtype is Number')

@@ -60,7 +60,7 @@ class Html(SFType):
     pass
 
 @dataclass
-class MasterDetail(SFType):
+class MasterDetail(Lookup):
     pass
 
 @dataclass

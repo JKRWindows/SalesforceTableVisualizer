@@ -118,8 +118,8 @@ class SFField:
 
     def to_dot(self) -> str:
         return f"""<TR><TD port="{self.full_name}" ALIGN="LEFT" BORDER="0">
-        {'<FONT color="red">*</FONT>' if self.required else ''}{self.full_name} ({self.label}): {self.dtype}{f"({self.length})" if self.length else ""}{' <FONT color="blue">UNIQUE</FONT>' if self.unique else ''}
-    </TD></TR>"""
+{'<FONT color="red">*</FONT>' if self.required else ''}{self.label} ({self.full_name}): {self.dtype}{f"({self.length})" if self.length else ""}{'<FONT color="blue">. .UNIQUE</FONT>' if self.unique else ''} 
+</TD></TR>"""
 
     @classmethod
     def from_folder(cls, folder_path: str) -> Iterable['SFField']:
